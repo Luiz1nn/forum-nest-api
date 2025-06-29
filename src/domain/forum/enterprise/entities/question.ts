@@ -53,6 +53,18 @@ export class Question extends AggregateRoot<QuestionProps> {
 		this.props.updatedAt = new Date()
 	}
 
+	set title(title: string) {
+		this.props.title = title
+		this.props.slug = Slug.createFromText(title)
+
+		this.touch()
+	}
+
+	set content(content: string) {
+		this.props.content = content
+		this.touch()
+	}
+
 	set attachments(attachments: QuestionAttachmentList) {
 		this.props.attachments = attachments
 		this.touch()

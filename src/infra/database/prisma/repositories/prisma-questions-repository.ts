@@ -15,6 +15,20 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
 		private questionAttachmentsRepository: QuestionAttachmentsRepository
 	) {}
 
+	async findById(id: string): Promise<Question | null> {
+		const question = await this.prisma.question.findUnique({
+			where: {
+				id,
+			},
+		})
+
+		if (!question) {
+			return null
+		}
+
+		return PrismaQuestionMapper.toDomain(question)
+	}
+
 	async create(question: Question): Promise<void> {
 		const data = PrismaQuestionMapper.toPrisma(question)
 
@@ -25,6 +39,27 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
 		await this.questionAttachmentsRepository.createMany(
 			question.attachments.getItems()
 		)
+
+		DomainEvents.dispatchEventsForAggregate(question.id)
+	}
+
+	async save(question: Question): Promise<void> {
+		const data = PrismaQuestionMapper.toPrisma(question)
+
+		await Promise.all([
+			this.prisma.question.update({
+				where: {
+					id: question.id.toString(),
+				},
+				data,
+			}),
+			this.questionAttachmentsRepository.createMany(
+				question.attachments.getNewItems()
+			),
+			this.questionAttachmentsRepository.deleteMany(
+				question.attachments.getRemovedItems()
+			),
+		])
 
 		DomainEvents.dispatchEventsForAggregate(question.id)
 	}
