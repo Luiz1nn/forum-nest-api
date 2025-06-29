@@ -17,8 +17,36 @@ export interface QuestionProps {
 }
 
 export class Question extends AggregateRoot<QuestionProps> {
+	get authorId() {
+		return this.props.authorId
+	}
+
+	get bestAnswerId() {
+		return this.props.bestAnswerId
+	}
+
+	get title() {
+		return this.props.title
+	}
+
+	get content() {
+		return this.props.content
+	}
+
+	get slug() {
+		return this.props.slug
+	}
+
 	get attachments() {
 		return this.props.attachments
+	}
+
+	get createdAt() {
+		return this.props.createdAt
+	}
+
+	get updatedAt() {
+		return this.props.updatedAt
 	}
 
 	private touch() {
