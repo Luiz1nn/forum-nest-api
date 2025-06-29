@@ -8,7 +8,7 @@
 	"files": {
 		"include": ["src/**/*.ts", "src/**/*.tsx"],
 		"ignoreUnknown": false,
-		"ignore": ["node_modules", ".next/**/*"]
+		"ignore": ["node_modules", ".next/**/*", "dist/**/*"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -46,7 +46,7 @@
 			"trailingCommas": "es5"
 		},
 		"parser": {
-      "unsafeParameterDecoratorsEnabled": true
-    }
+			"unsafeParameterDecoratorsEnabled": true
+		}
 	}
 }
