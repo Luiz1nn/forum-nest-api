@@ -13,6 +13,6 @@ import { PrismaStudentsRepository } from './prisma/repositories/prisma-students-
 			useClass: PrismaStudentsRepository,
 		},
 	],
-	exports: [StudentsRepository],
+	exports: [PrismaService, StudentsRepository],
 })
 export class DatabaseModule {}
