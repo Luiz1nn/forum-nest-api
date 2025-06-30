@@ -51,4 +51,12 @@ export class PrismaQuestionAttachmentsRepository
 
 		return questionAttachments.map(PrismaQuestionAttachmentMapper.toDomain)
 	}
+
+	async deleteManyByQuestionId(questionId: string): Promise<void> {
+		await this.prisma.attachment.deleteMany({
+			where: {
+				questionId,
+			},
+		})
+	}
 }

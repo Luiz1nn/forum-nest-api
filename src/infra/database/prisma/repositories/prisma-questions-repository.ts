@@ -63,4 +63,14 @@ export class PrismaQuestionsRepository implements QuestionsRepository {
 
 		DomainEvents.dispatchEventsForAggregate(question.id)
 	}
+
+	async delete(question: Question): Promise<void> {
+		const data = PrismaQuestionMapper.toPrisma(question)
+
+		await this.prisma.question.delete({
+			where: {
+				id: data.id,
+			},
+		})
+	}
 }
