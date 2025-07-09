@@ -15,6 +15,20 @@ export class PrismaAnswersRepository implements AnswersRepository {
 		private answerAttachmentsRepository: AnswerAttachmentsRepository
 	) {}
 
+	async findById(id: string): Promise<Answer | null> {
+		const answer = await this.prisma.answer.findUnique({
+			where: {
+				id,
+			},
+		})
+
+		if (!answer) {
+			return null
+		}
+
+		return PrismaAnswerMapper.toDomain(answer)
+	}
+
 	async create(answer: Answer): Promise<void> {
 		const data = PrismaAnswerMapper.toPrisma(answer)
 
