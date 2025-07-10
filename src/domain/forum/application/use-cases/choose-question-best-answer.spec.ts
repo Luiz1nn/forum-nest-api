@@ -1,5 +1,6 @@
 import { UniqueEntityID } from '~/core/entities/unique-entity-id'
 import { NotAllowedError } from '~/core/errors/errors/not-allowed-error'
+import { ResourceNotFoundError } from '~/core/errors/errors/resource-not-found-error'
 import { makeAnswer } from '~/tests/factories/make-answer'
 import { makeQuestion } from '~/tests/factories/make-question'
 import { InMemoryAnswerAttachmentsRepository } from '~/tests/repositories/in-memory-answer-attachments-repository'
@@ -79,5 +80,33 @@ describe('Choose Question Best Answer', () => {
 
 		expect(result.isLeft()).toBe(true)
 		expect(result.value).toBeInstanceOf(NotAllowedError)
+	})
+
+	it('should return ResourceNotFoundError if answer does not exist', async () => {
+		const question = makeQuestion()
+		await inMemoryQuestionsRepository.create(question)
+
+		const result = await sut.execute({
+			answerId: 'non-existent-answer-id',
+			authorId: question.authorId.toString(),
+		})
+
+		expect(result.isLeft()).toBe(true)
+		expect(result.value).toBeInstanceOf(ResourceNotFoundError)
+	})
+
+	it('should return ResourceNotFoundError if question does not exist', async () => {
+		const answer = makeAnswer({
+			questionId: new UniqueEntityID('non-existent-question-id'),
+		})
+		await inMemoryAnswersRepository.create(answer)
+
+		const result = await sut.execute({
+			answerId: answer.id.toString(),
+			authorId: 'any-author-id',
+		})
+
+		expect(result.isLeft()).toBe(true)
+		expect(result.value).toBeInstanceOf(ResourceNotFoundError)
 	})
 })
