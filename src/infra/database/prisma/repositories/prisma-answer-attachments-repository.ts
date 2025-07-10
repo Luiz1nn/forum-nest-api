@@ -21,4 +21,12 @@ export class PrismaAnswerAttachmentsRepository
 
 		await this.prisma.attachment.updateMany(data)
 	}
+
+	async deleteManyByAnswerId(answerId: string): Promise<void> {
+		await this.prisma.attachment.deleteMany({
+			where: {
+				answerId,
+			},
+		})
+	}
 }
