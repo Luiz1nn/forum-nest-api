@@ -6,6 +6,7 @@ import { DeleteAnswerUseCase } from '~/domain/forum/application/use-cases/delete
 import { DeleteQuestionUseCase } from '~/domain/forum/application/use-cases/delete-question'
 import { EditAnswerUseCase } from '~/domain/forum/application/use-cases/edit-answer'
 import { EditQuestionUseCase } from '~/domain/forum/application/use-cases/edit-question'
+import { FetchQuestionAnswersUseCase } from '~/domain/forum/application/use-cases/fetch-question-answers'
 import { FetchRecentQuestionsUseCase } from '~/domain/forum/application/use-cases/fetch-recent-questions'
 import { GetQuestionBySlugUseCase } from '~/domain/forum/application/use-cases/get-question-by-slug'
 import { RegisterStudentUseCase } from '~/domain/forum/application/use-cases/register-student'
@@ -23,6 +24,7 @@ import { DeleteAnswerController } from './controllers/delete-answer.controller'
 import { DeleteQuestionController } from './controllers/delete-question.controller'
 import { EditAnswerController } from './controllers/edit-answer.controller'
 import { EditQuestionController } from './controllers/edit-question.controller'
+import { FetchQuestionAnswersController } from './controllers/fetch-question-answers.controller'
 import { FetchRecentQuestionsController } from './controllers/fetch-recent-questions.controller'
 import { GetQuestionBySlugController } from './controllers/get-question-by-slug.controller'
 
@@ -40,6 +42,7 @@ import { GetQuestionBySlugController } from './controllers/get-question-by-slug.
 		ChooseQuestionBestAnswerController,
 		DeleteAnswerController,
 		EditAnswerController,
+		FetchQuestionAnswersController,
 	],
 	providers: [
 		RegisterStudentUseCase,
@@ -53,6 +56,7 @@ import { GetQuestionBySlugController } from './controllers/get-question-by-slug.
 		ChooseQuestionBestAnswerUseCase,
 		DeleteAnswerUseCase,
 		EditAnswerUseCase,
+		FetchQuestionAnswersUseCase,
 	],
 })
 export class HttpModule {}
