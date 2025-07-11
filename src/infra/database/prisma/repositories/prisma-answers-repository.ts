@@ -43,6 +43,27 @@ export class PrismaAnswersRepository implements AnswersRepository {
 		DomainEvents.dispatchEventsForAggregate(answer.id)
 	}
 
+	async save(answer: Answer): Promise<void> {
+		const data = PrismaAnswerMapper.toPrisma(answer)
+
+		await Promise.all([
+			this.prisma.answer.update({
+				where: {
+					id: answer.id.toString(),
+				},
+				data,
+			}),
+			this.answerAttachmentsRepository.createMany(
+				answer.attachments.getNewItems()
+			),
+			this.answerAttachmentsRepository.deleteMany(
+				answer.attachments.getRemovedItems()
+			),
+		])
+
+		DomainEvents.dispatchEventsForAggregate(answer.id)
+	}
+
 	async delete(answer: Answer): Promise<void> {
 		await this.prisma.answer.delete({
 			where: {
