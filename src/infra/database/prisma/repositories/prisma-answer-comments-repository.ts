@@ -12,11 +12,33 @@ export class PrismaAnswerCommentsRepository
 {
 	constructor(private prisma: PrismaService) {}
 
+	async findById(id: string): Promise<AnswerComment | null> {
+		const answerComment = await this.prisma.comment.findUnique({
+			where: {
+				id,
+			},
+		})
+
+		if (!answerComment) {
+			return null
+		}
+
+		return PrismaAnswerCommentMapper.toDomain(answerComment)
+	}
+
 	async create(answerComment: AnswerComment): Promise<void> {
 		const data = PrismaAnswerCommentMapper.toPrisma(answerComment)
 
 		await this.prisma.comment.create({
 			data,
+		})
+	}
+
+	async delete(answerComment: AnswerComment): Promise<void> {
+		await this.prisma.comment.delete({
+			where: {
+				id: answerComment.id.toString(),
+			},
 		})
 	}
 }
