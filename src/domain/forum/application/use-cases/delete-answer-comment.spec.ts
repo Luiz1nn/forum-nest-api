@@ -1,16 +1,22 @@
 import { UniqueEntityID } from '~/core/entities/unique-entity-id'
 import { NotAllowedError } from '~/core/errors/errors/not-allowed-error'
+import { ResourceNotFoundError } from '~/core/errors/errors/resource-not-found-error'
 import { makeAnswerComment } from '~/tests/factories/make-answer-comment'
 import { InMemoryAnswerCommentsRepository } from '~/tests/repositories/in-memory-answer-comments-repository'
+import { InMemoryStudentsRepository } from '~/tests/repositories/in-memory-students-repository'
 
 import { DeleteAnswerCommentUseCase } from './delete-answer-comment'
 
+let inMemoryStudentsRepository: InMemoryStudentsRepository
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository
 let sut: DeleteAnswerCommentUseCase
 
 describe('Delete Answer Comment', () => {
 	beforeEach(() => {
-		inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository()
+		inMemoryStudentsRepository = new InMemoryStudentsRepository()
+		inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository(
+			inMemoryStudentsRepository
+		)
 
 		sut = new DeleteAnswerCommentUseCase(inMemoryAnswerCommentsRepository)
 	})
@@ -42,5 +48,15 @@ describe('Delete Answer Comment', () => {
 
 		expect(result.isLeft()).toBe(true)
 		expect(result.value).toBeInstanceOf(NotAllowedError)
+	})
+
+	it('should return ResourceNotFoundError if answer comment does not exist', async () => {
+		const result = await sut.execute({
+			answerCommentId: 'non-existent-id',
+			authorId: 'any-author-id',
+		})
+
+		expect(result.isLeft()).toBe(true)
+		expect(result.value).toBeInstanceOf(ResourceNotFoundError)
 	})
 })
