@@ -20,6 +20,7 @@ import { Module } from '@nestjs/common'
 
 import { CryptographyModule } from '../cryptography/cryptography.module'
 import { DatabaseModule } from '../database/database.module'
+import { StorageModule } from '../storage/storage.module'
 import { AnswerQuestionController } from './controllers/answer-question.controller'
 import { AuthenticateController } from './controllers/authenticate.controller'
 import { ChooseQuestionBestAnswerController } from './controllers/choose-question-best-answer.controller'
@@ -39,7 +40,7 @@ import { FetchRecentQuestionsController } from './controllers/fetch-recent-quest
 import { GetQuestionBySlugController } from './controllers/get-question-by-slug.controller'
 
 @Module({
-	imports: [DatabaseModule, CryptographyModule],
+	imports: [DatabaseModule, CryptographyModule, StorageModule],
 	controllers: [
 		CreateAccountController,
 		AuthenticateController,
